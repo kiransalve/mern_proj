@@ -107,3 +107,52 @@ export const login = catchAsyncError(async (req, res, next) => {
   }
   generateToken(user, "User logged in successfully!", 200, res);
 });
+
+export const addNewAdmin = catchAsyncError(async (req, res, next) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    nic,
+    dob,
+    gender,
+    password,
+  } = req.body;
+
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phone ||
+    !nic ||
+    !dob ||
+    !gender ||
+    !password
+  ) {
+    return next(new ErrorHandlar("Please fill full form!", 400));
+  }
+  const isRegistered = await User.findOne({ email });
+  if (isRegistered) {
+    return next(
+      new ErrorHandlar(
+        `${isRegistered.role} with this email already registered!`
+      )
+    );
+  }
+  const admin = await User.create({
+    firstName,
+    lastName,
+    email,
+    phone,
+    nic,
+    dob,
+    gender,
+    password,
+    role: "Admin",
+  });
+  res.status(200).json({
+    success: true,
+    message: "New Admin Registered!",
+  });
+});
