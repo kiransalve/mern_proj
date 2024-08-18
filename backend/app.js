@@ -6,6 +6,7 @@ import express from "express";
 // aur unko process.env mein set kar deta hai, taaki secure cheezein (jaise API keys) env file mein store rahe.
 import { config } from "dotenv";
 
+import userRouter from "./router/userRouter.js";
 // Bhai, yeh cors module hai, jo Cross-Origin Resource Sharing ko handle karta hai.
 // Iska use hota hai taaki humari app dusre domains se aane wali requests ko allow kar sake.
 import cors from "cors";
@@ -72,6 +73,7 @@ app.use(
 // Bhai, hum messageRouter ko "/api/v1/message" path pe mount kar rahe hain.
 // Iska matlab jo bhi requests "/api/v1/message" pe aayengi, wo messageRouter handle karega.
 app.use("/api/v1/message", messageRouter);
+app.use("/api/v1/user", userRouter);
 
 // Bhai, dbConnect() function ko call kar rahe hain jo MongoDB se connection banane ka kaam karega.
 // Isse humara app aur database ke beech link ban jata hai.
