@@ -1,11 +1,11 @@
-// Bhai, yeh code snippet ek user registration function ko define karta hai jo `patientRegister` naam se jana jata hai.
-// Yeh function asynchronous hai aur errors ko handle karne ke liye `catchAsyncError` middleware ke through wrap kiya gaya hai.
+// Bhai, yeh code snippet `patientRegister` aur `login` functions ko define karta hai jo user registration aur login ke liye hain.
+// In functions ko asynchronous operations handle karne ke liye `catchAsyncError` middleware ke through wrap kiya gaya hai.
 
-import { catchAsyncError } from "../middleware/catchAsyncError.js"; // Bhai, `catchAsyncError` middleware ko import kar rahe hain jo asynchronous errors ko handle karta hai.
-import ErrorHandlar from "../middleware/errorMiddleware.js"; // Bhai, custom error handling ke liye `ErrorHandlar` class ko import kar rahe hain.
-import { User } from "../models/userSchema.js"; // Bhai, MongoDB user schema ke saath interaction ke liye `User` model ko import kar rahe hain.
+import { catchAsyncError } from "../middleware/catchAsyncError.js"; // Bhai, yeh middleware asynchronous errors ko handle karne ke liye import kiya gaya hai.
+import ErrorHandlar from "../middleware/errorMiddleware.js"; // Bhai, yeh custom error handling ke liye import kiya gaya hai.
+import { User } from "../models/userSchema.js"; // Bhai, MongoDB user schema ke saath interaction ke liye import kiya gaya hai.
 
-// `patientRegister` function ko define kar rahe hain jo user ko register karne ke liye responsible hai.
+// `patientRegister` function ko define kar rahe hain jo user registration ke liye responsible hai.
 export const patientRegister = catchAsyncError(async (req, res, next) => {
   // Bhai, request body se user ke details ko extract kar rahe hain.
   const {
@@ -63,5 +63,55 @@ export const patientRegister = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true, // Response ke sath indicate kar rahe hain ki registration successful raha.
     message: "User Registered!", // Success message bhej rahe hain.
+  });
+});
+
+// `login` function ko define kar rahe hain jo user login ke liye responsible hai.
+export const login = catchAsyncError(async (req, res, next) => {
+  const { email, password, confirmPassword, role } = req.body;
+
+  // Bhai, check karte hain ki kya sab required fields request body me hain ya nahi.
+  if (!email || !password || !confirmPassword || !role) {
+    // Agar kisi bhi field ka value nahi hai, to `ErrorHandlar` se ek custom error generate karte hain.
+    // Yeh error 400 status code ke saath "Please provide all details" message ke sath bheja jayega.
+    return next(new ErrorHandlar("Please provide all details", 400));
+  }
+
+  // Bhai, check karte hain ki password aur confirm password match karte hain ya nahi.
+  if (password !== confirmPassword) {
+    // Agar password aur confirm password match nahi karte, to `ErrorHandlar` se ek custom error generate karte hain.
+    // Yeh error 400 status code ke saath "Password and Confirm password Do not match!" message ke sath bheja jayega.
+    return next(
+      new ErrorHandlar("Password and Confirm password Do not match!", 400)
+    );
+  }
+
+  // Bhai, email ke basis pe user ko database me search karte hain aur password ko select karte hain.
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    // Agar email ke sath koi user nahi milta, to `ErrorHandlar` se ek custom error generate karte hain.
+    // Yeh error 400 status code ke saath "Invalid email or password" message ke sath bheja jayega.
+    return next(new ErrorHandlar("Invalid email or password", 400));
+  }
+
+  // Bhai, check karte hain ki entered password aur stored password match karte hain ya nahi.
+  const isPasswordMatch = await user.comparePassword(password);
+  if (!isPasswordMatch) {
+    // Agar password match nahi karta, to `ErrorHandlar` se ek custom error generate karte hain.
+    // Yeh error 400 status code ke saath "Invalid email or password" message ke sath bheja jayega.
+    return next(new ErrorHandlar("Invalid email or password", 400));
+  }
+
+  // Bhai, check karte hain ki provided role aur stored role match karte hain ya nahi.
+  if (role !== user.role) {
+    // Agar role match nahi karta, to `ErrorHandlar` se ek custom error generate karte hain.
+    // Yeh error 400 status code ke saath "User with this role not found" message ke sath bheja jayega.
+    return next(new ErrorHandlar("User with this role not found", 400));
+  }
+
+  // Bhai, agar sab kuch theek hai, to ek success response bhejte hain.
+  res.status(200).json({
+    success: true, // Response ke sath indicate kar rahe hain ki login successful raha.
+    message: "User logged in successfully!", // Success message bhej rahe hain.
   });
 });
