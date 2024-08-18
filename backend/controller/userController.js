@@ -4,6 +4,7 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js"; // Bhai, yeh middleware asynchronous errors ko handle karne ke liye import kiya gaya hai.
 import ErrorHandlar from "../middleware/errorMiddleware.js"; // Bhai, yeh custom error handling ke liye import kiya gaya hai.
 import { User } from "../models/userSchema.js"; // Bhai, MongoDB user schema ke saath interaction ke liye import kiya gaya hai.
+import { generateToken } from "../utils/jwtToken.js";
 
 // `patientRegister` function ko define kar rahe hain jo user registration ke liye responsible hai.
 export const patientRegister = catchAsyncError(async (req, res, next) => {
@@ -59,11 +60,7 @@ export const patientRegister = catchAsyncError(async (req, res, next) => {
     role, // User ka role.
   });
 
-  // Bhai, agar user successfully register ho gaya, to ek success response bhejte hain.
-  res.status(200).json({
-    success: true, // Response ke sath indicate kar rahe hain ki registration successful raha.
-    message: "User Registered!", // Success message bhej rahe hain.
-  });
+  generateToken(user, "User registered successfully!", 200, res);
 });
 
 // `login` function ko define kar rahe hain jo user login ke liye responsible hai.
@@ -108,10 +105,5 @@ export const login = catchAsyncError(async (req, res, next) => {
     // Yeh error 400 status code ke saath "User with this role not found" message ke sath bheja jayega.
     return next(new ErrorHandlar("User with this role not found", 400));
   }
-
-  // Bhai, agar sab kuch theek hai, to ek success response bhejte hain.
-  res.status(200).json({
-    success: true, // Response ke sath indicate kar rahe hain ki login successful raha.
-    message: "User logged in successfully!", // Success message bhej rahe hain.
-  });
+  generateToken(user, "User logged in successfully!", 200, res);
 });
