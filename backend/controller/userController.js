@@ -1,4 +1,9 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
+import ErrorHandlar from "../middleware/errorMiddleware.js";
+import { User } from "../models/userSchema.js";
+import cloudinary from "cloudinary";
+import { generateToken } from "../utils/jwtToken.js";
+
 // Bhai, yeh patient ko register karne ka function hai jo token bhi generate karta hai.
 export const patientRegister = catchAsyncError(async (req, res, next) => {
   // Bhai, request body se user ke details nikaal rahe hain.
@@ -180,10 +185,11 @@ export const logoutAdmin = catchAsyncError(async (req, res, next) => {
     })
     .json({
       success: true,
-      message: "User is logged out!", // Bhai, logout hone ka message bhej rahe hain.
+      message: "Admin is logged out!", // Bhai, logout hone ka message bhej rahe hain.
     });
 });
-// Bhai, yeh function admin ko logout karne ke liye hai.
+
+// Bhai, yeh function patient ko logout karne ke liye hai.
 export const logoutPatient = catchAsyncError(async (req, res, next) => {
   // Bhai, patient ka token ko clear kar rahe hain aur expiration time set kar rahe hain.
   res
@@ -194,6 +200,81 @@ export const logoutPatient = catchAsyncError(async (req, res, next) => {
     })
     .json({
       success: true,
-      message: "User is logged out!", // Bhai, logout hone ka message bhej rahe hain.
+      message: "Patient is logged out!", // Bhai, logout hone ka message bhej rahe hain.
     });
+});
+
+export const addNewDoctor = catchAsyncError(async (req, res, next) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return next(new ErrorHandler("Doctor Avatar Required!", 400));
+  }
+  const { docAvatar } = req.files;
+  const allowedFormats = ["image/png", "image/jpeg", "image/webp"];
+  if (!allowedFormats.includes(docAvatar.mimetype)) {
+    return next(new ErrorHandler("File Format Not Supported!", 400));
+  }
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    nic,
+    dob,
+    gender,
+    password,
+    doctorDepartment,
+  } = req.body;
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phone ||
+    !nic ||
+    !dob ||
+    !gender ||
+    !password ||
+    !doctorDepartment ||
+    !docAvatar
+  ) {
+    return next(new ErrorHandler("Please Fill Full Form!", 400));
+  }
+  const isRegistered = await User.findOne({ email });
+  if (isRegistered) {
+    return next(
+      new ErrorHandler("Doctor With This Email Already Exists!", 400)
+    );
+  }
+  const cloudinaryResponse = await cloudinary.uploader.upload(
+    docAvatar.tempFilePath
+  );
+  if (!cloudinaryResponse || cloudinaryResponse.error) {
+    console.error(
+      "Cloudinary Error:",
+      cloudinaryResponse.error || "Unknown Cloudinary error"
+    );
+    return next(
+      new ErrorHandler("Failed To Upload Doctor Avatar To Cloudinary", 500)
+    );
+  }
+  const doctor = await User.create({
+    firstName,
+    lastName,
+    email,
+    phone,
+    nic,
+    dob,
+    gender,
+    password,
+    role: "Doctor",
+    doctorDepartment,
+    docAvatar: {
+      public_id: cloudinaryResponse.public_id,
+      url: cloudinaryResponse.secure_url,
+    },
+  });
+  res.status(200).json({
+    success: true,
+    message: "New Doctor Registered",
+    doctor,
+  });
 });
