@@ -3,6 +3,7 @@ import ErrorHandlar from "../middleware/errorMiddleware.js";
 import { User } from "../models/userSchema.js";
 import cloudinary from "cloudinary";
 import { generateToken } from "../utils/jwtToken.js";
+import { Message } from "../models/messageSchema.js";
 
 // Bhai, yeh patient ko register karne ka function hai jo token bhi generate karta hai.
 export const patientRegister = catchAsyncError(async (req, res, next) => {
@@ -276,5 +277,13 @@ export const addNewDoctor = catchAsyncError(async (req, res, next) => {
     success: true,
     message: "New Doctor Registered",
     doctor,
+  });
+});
+
+export const getAllMessages = catchAsyncError(async (req, res, next) => {
+  const message = await Message.find();
+  res.status(200).json({
+    success: true,
+    message,
   });
 });
