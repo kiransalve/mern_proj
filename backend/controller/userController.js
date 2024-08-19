@@ -165,3 +165,11 @@ export const getAllDoctors = catchAsyncError(async (req, res, next) => {
     doctors,
   });
 });
+
+export const getUserDetails = catchAsyncError(async (req, res, next) => {
+  const user = req.user;
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
