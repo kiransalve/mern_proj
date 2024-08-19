@@ -1,3 +1,4 @@
+import { catchAsyncError } from "../middleware/catchAsyncError.js";
 // Bhai, yeh patient ko register karne ka function hai jo token bhi generate karta hai.
 export const patientRegister = catchAsyncError(async (req, res, next) => {
   // Bhai, request body se user ke details nikaal rahe hain.
@@ -174,6 +175,20 @@ export const logoutAdmin = catchAsyncError(async (req, res, next) => {
   res
     .status(200)
     .cookie("adminToken", "", {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      message: "User is logged out!", // Bhai, logout hone ka message bhej rahe hain.
+    });
+});
+// Bhai, yeh function admin ko logout karne ke liye hai.
+export const logoutPatient = catchAsyncError(async (req, res, next) => {
+  // Bhai, patient ka token ko clear kar rahe hain aur expiration time set kar rahe hain.
+  res
+    .status(200)
+    .cookie("patientToken", "", {
       httpOnly: true,
       expires: new Date(Date.now()),
     })
