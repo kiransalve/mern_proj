@@ -341,16 +341,13 @@ footer .content div ul {
   gap: 10px;
 }
 footer .content div ul a {
-  color: gray;
   text-decoration: none;
+  color: white;
 }
 footer .content div ul a:hover {
-  color: #8570ed;
   transition: 0.3s;
 }
-footer .content div ul li span {
-  color: gray;
-}
+
 footer .content div ul li span:first-child {
   width: 150px;
   display: inline-block;

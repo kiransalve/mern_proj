@@ -11,6 +11,7 @@ import { useContext, useEffect } from "react";
 import { Context } from "./context/AppWrapper";
 import axios from "axios";
 import About from "./page/About";
+import Footer from "./components/Footer";
 
 const App = () => {
   const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(
@@ -39,6 +40,7 @@ const App = () => {
           <Route element={<Login />} path="/login" />
           <Route element={<Register />} path="/register" />
         </Routes>
+        <Footer />
         <ToastContainer position="top-center" />
       </BrowserRouter>
     </>
