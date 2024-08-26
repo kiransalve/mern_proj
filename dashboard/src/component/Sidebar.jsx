@@ -16,6 +16,9 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
 
+  if (!isAuthenticated) {
+    navigate("/login");
+  }
   const homepage = () => {
     navigate("/");
     setShow(!show);

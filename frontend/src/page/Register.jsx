@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
 import { Context } from "../context/AppWrapper";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Register = () => {
   const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(
