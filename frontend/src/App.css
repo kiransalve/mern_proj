@@ -338,7 +338,7 @@ footer .content div h4 {
 footer .content div ul {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 footer .content div ul a {
   text-decoration: none;

@@ -33,7 +33,6 @@ const Navbar = () => {
     <nav className="container">
       <div className="logo" onClick={() => navigate("/")}>
         <img src="/logo.svg" alt="logo" className="logo-img" />
-        Healthcare
       </div>
       <div className={show ? "navLinks showmenu" : "navLinks"}>
         <div className="links">
