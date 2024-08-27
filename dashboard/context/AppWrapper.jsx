@@ -2,7 +2,8 @@ import { createContext, useState } from "react";
 
 export const Context = createContext({ isAuthenticated: false });
 const AppWrapper = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
   const [user, setUser] = useState({});
 
   return (

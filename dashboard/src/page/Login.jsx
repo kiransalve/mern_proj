@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Context } from "../../context/AppWrapper";
@@ -8,9 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(
-    Context
-  );
+  const { setIsAuthenticated } = useContext(Context);
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -29,14 +27,11 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-
       toast.error(error.response.data.message);
     }
   };
   const navigate = useNavigate();
-  if (isAuthenticated) {
-    navigate("/");
-  }
+
   return (
     <div className="container form-component">
       <div className="auth-header">Sign In</div>

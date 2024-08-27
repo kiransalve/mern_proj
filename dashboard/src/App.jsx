@@ -6,7 +6,7 @@ import Login from "./page/Login";
 import Doctors from "./page/Doctors";
 import Dashboard from "./page/Dashboard";
 import Message from "./page/Message";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useContext, useEffect } from "react";
 import { Context } from "../context/AppWrapper";
@@ -14,7 +14,7 @@ import axios from "axios";
 import Sidebar from "./component/Sidebar";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(
+  const { isAuthenticated, setIsAuthenticated, setUser, user } = useContext(
     Context
   );
   useEffect(() => {
@@ -29,26 +29,31 @@ const App = () => {
       } catch (error) {
         setIsAuthenticated(false);
         setUser({});
+        console.error(error);
       }
     };
     fetchUser();
-  }, [isAuthenticated]);
+  }, [setIsAuthenticated, setUser]);
 
   return (
-    <div>
-      <BrowserRouter>
-        <Sidebar />
-        <Routes>
+    <BrowserRouter>
+      {isAuthenticated && <Sidebar />}
+      <Routes>
+        {isAuthenticated && (
           <Route element={<AddNewAdmin />} path="/addnewadmin" />
+        )}
+        {isAuthenticated && (
           <Route element={<AddNewDoctor />} path="/addnewdoctor" />
-          <Route element={<Login />} path="/login" />
-          <Route element={<Doctors />} path="/doctors" />
-          <Route element={<Dashboard />} path="/" />
-          <Route element={<Message />} path="/message" />
-        </Routes>
-        <ToastContainer position="top-center" />
-      </BrowserRouter>
-    </div>
+        )}
+        <Route element={<Login />} path="/login" />
+        {isAuthenticated && <Route element={<Doctors />} path="/doctors" />}
+        {isAuthenticated && (
+          <Route element={<Dashboard user={user} />} path="/" />
+        )}
+        {isAuthenticated && <Route element={<Message />} path="/message" />}
+      </Routes>
+      <ToastContainer position="top-center" />
+    </BrowserRouter>
   );
 };
 

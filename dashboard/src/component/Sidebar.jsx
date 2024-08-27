@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../../context/AppWrapper";
 import { TiHome } from "react-icons/ti";
 import { RiLogoutBoxFill } from "react-icons/ri";
@@ -10,15 +10,12 @@ import { IoPersonSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 const Sidebar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-
   const navigate = useNavigate();
 
-  if (!isAuthenticated) {
-    navigate("/login");
-  }
   const homepage = () => {
     navigate("/");
     setShow(!show);
@@ -45,6 +42,7 @@ const Sidebar = () => {
       );
       toast.success(response.data.message);
       setIsAuthenticated(false);
+      navigate("/login");
     } catch (error) {
       toast.error(error.response.data.message);
     }

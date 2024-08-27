@@ -1,14 +1,9 @@
-import { useContext, useState } from "react";
-import { Context } from "../../../frontend/src/context/AppWrapper";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
 const AddNewAdmin = () => {
-  const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(
-    Context
-  );
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,11 +16,6 @@ const AddNewAdmin = () => {
     role: "Admin",
   });
 
-  const navigate = useNavigate();
-
-  if (isAuthenticated) {
-    navigate("/login");
-  }
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +24,7 @@ const AddNewAdmin = () => {
       [name]: value,
     }));
   };
-
+  const navigate = useNavigate();
   // Handle form submission
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -62,7 +52,6 @@ const AddNewAdmin = () => {
           gender: "",
           password: "",
         });
-        setIsAuthenticated(true);
         toast.success(response.data.message);
         navigate("/");
       }

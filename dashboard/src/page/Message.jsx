@@ -1,21 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { Context } from "../../context/AppWrapper";
-import { useNavigate } from "react-router-dom";
 
 const Message = () => {
   const [message, setMessage] = useState([]);
-  const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(
-    Context
-  );
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, []);
   useEffect(() => {
     const fetchMessage = async () => {
       try {
@@ -32,6 +20,7 @@ const Message = () => {
     };
     fetchMessage();
   }, []);
+
   return (
     <section className="page messages">
       <h1>Message</h1>
