@@ -19,6 +19,7 @@ const requiredFields = [
 const findMissingFields = (fields, data) => {
   return fields.filter((field) => !data[field]);
 };
+
 export const patientRegister = catchAsyncError(async (req, res, next) => {
   const requestData = req.body;
   const {
@@ -144,7 +145,6 @@ export const addNewAdmin = catchAsyncError(async (req, res, next) => {
 
 export const getAllDoctors = catchAsyncError(async (req, res, next) => {
   const doctors = await User.find({ role: "Doctor" });
-
   res.status(200).json({
     success: true,
     doctors,
@@ -153,38 +153,21 @@ export const getAllDoctors = catchAsyncError(async (req, res, next) => {
 
 export const getUserDetails = catchAsyncError(async (req, res, next) => {
   const user = req.user;
-
   res.status(200).json({
     success: true,
     user,
   });
 });
 
-export const logoutAdmin = catchAsyncError(async (req, res, next) => {
-  res
-    .status(200)
-    .cookie("adminToken", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
-    .json({
-      success: true,
-      message: "Admin is logged out!",
-    });
-});
-
-export const logoutPatient = catchAsyncError(async (req, res, next) => {
-  res
-    .status(200)
-    .cookie("patientToken", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
-    .json({
-      success: true,
-      message: "Patient is logged out!",
-    });
-});
+export const logoutUser = (req, res, next) => {
+  // Clear the appropriate token based on user role
+  const tokenKey = req.user.role === "Admin" ? "adminToken" : "patientToken";
+  res.clearCookie(tokenKey);
+  res.status(200).json({
+    success: true,
+    message: `${req.user.role} logged out successfully!`,
+  });
+};
 
 export const addNewDoctor = catchAsyncError(async (req, res, next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
