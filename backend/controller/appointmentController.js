@@ -8,14 +8,12 @@ const requiredFields = [
   "lastName",
   "email",
   "phone",
-  "nic",
   "dob",
   "gender",
   "appointment_date",
   "department",
   "doctor_firstName",
   "doctor_lastName",
-  "hasVisited",
   "address",
 ];
 
@@ -38,14 +36,13 @@ export const postAppointment = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     appointment_date,
     department,
     doctor_firstName,
     doctor_lastName,
-    hasVisited,
+
     address,
   } = requestData;
 
@@ -77,7 +74,6 @@ export const postAppointment = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     appointment_date,
@@ -86,7 +82,6 @@ export const postAppointment = catchAsyncError(async (req, res, next) => {
       firstName: doctor_firstName,
       lastName: doctor_lastName,
     },
-    hasVisited,
     address,
     doctorId,
     patientId,
@@ -101,7 +96,6 @@ export const postAppointment = catchAsyncError(async (req, res, next) => {
 
 export const getAllAppointments = catchAsyncError(async (req, res, next) => {
   const appointment = await Appointment.find();
-  console.log(appointment);
   res.status(200).json({
     success: true,
     appointment,

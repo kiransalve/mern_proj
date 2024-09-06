@@ -10,7 +10,6 @@ const requiredFields = [
   "lastName",
   "email",
   "phone",
-  "nic",
   "dob",
   "gender",
   "password",
@@ -27,7 +26,6 @@ export const patientRegister = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -51,7 +49,6 @@ export const patientRegister = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -92,23 +89,13 @@ export const login = catchAsyncError(async (req, res, next) => {
 });
 
 export const addNewAdmin = catchAsyncError(async (req, res, next) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    phone,
-    nic,
-    dob,
-    gender,
-    password,
-  } = req.body;
+  const { firstName, lastName, email, phone, dob, gender, password } = req.body;
 
   if (
     !firstName ||
     !lastName ||
     !email ||
     !phone ||
-    !nic ||
     !dob ||
     !gender ||
     !password
@@ -130,7 +117,6 @@ export const addNewAdmin = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -148,6 +134,14 @@ export const getAllDoctors = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     doctors,
+  });
+});
+
+export const getAllPatient = catchAsyncError(async (req, res, next) => {
+  const patient = await User.find({ role: "Patient" });
+  res.status(200).json({
+    success: true,
+    patient,
   });
 });
 
@@ -183,7 +177,6 @@ export const addNewDoctor = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,
@@ -194,7 +187,6 @@ export const addNewDoctor = catchAsyncError(async (req, res, next) => {
     !lastName ||
     !email ||
     !phone ||
-    !nic ||
     !dob ||
     !gender ||
     !password ||
@@ -226,7 +218,6 @@ export const addNewDoctor = catchAsyncError(async (req, res, next) => {
     lastName,
     email,
     phone,
-    nic,
     dob,
     gender,
     password,

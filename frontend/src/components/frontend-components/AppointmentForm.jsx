@@ -9,14 +9,12 @@ const AppointmentForm = () => {
     lastName: "",
     email: "",
     phone: "",
-    nic: "",
     dob: "",
     gender: "",
     appointment_date: "",
     department: "",
     doctor_firstName: "",
     doctor_lastName: "",
-    hasVisited: false,
     address: "",
   });
   const [doctorDepartments] = useState([
@@ -60,7 +58,7 @@ const AppointmentForm = () => {
   const handleAppointment = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         `${
           import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
         }/api/v1/appointment/post`,
@@ -72,24 +70,25 @@ const AppointmentForm = () => {
           },
         }
       );
-      toast.success(data.message);
+      toast.success(response.data.message);
       navigate("/");
     } catch (error) {
-      toast.error(error.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
   return (
-    <div className="container form-component appointment-form">
-      <div className="auth-header">Book Appointment</div>
-      <form onSubmit={handleAppointment}>
-        <div className="">
+    <div className="flex flex-col justify-center items-center gap-10">
+      <div className="heading">Book Appointment</div>
+      <form onSubmit={handleAppointment} className="flex flex-col gap-4">
+        <div className="flex gap-4 md:flex-row flex-col">
           <input
             placeholder="FirstName"
             type="text"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
+            className="input-box flex-1"
             required
           />
 
@@ -100,9 +99,10 @@ const AppointmentForm = () => {
             value={formData.lastName}
             onChange={handleChange}
             required
+            className="input-box flex-1"
           />
         </div>
-        <div className="">
+        <div className="flex gap-4 md:flex-row flex-col">
           <input
             placeholder="email"
             type="email"
@@ -110,6 +110,7 @@ const AppointmentForm = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            className="input-box flex-1"
           />
 
           <input
@@ -119,17 +120,10 @@ const AppointmentForm = () => {
             value={formData.phone}
             onChange={handleChange}
             required
+            className="input-box flex-1"
           />
         </div>
-        <div className="">
-          <input
-            placeholder="NIC"
-            type="text"
-            name="nic"
-            value={formData.nic}
-            onChange={handleChange}
-            required
-          />
+        <div className="flex gap-4 md:flex-row flex-col">
           <input
             placeholder="DOB"
             type="date"
@@ -137,14 +131,16 @@ const AppointmentForm = () => {
             value={formData.dob}
             onChange={handleChange}
             required
+            className="input-box flex-1"
           />
         </div>
-        <div className="">
+        <div className="flex gap-4 md:flex-row flex-col">
           <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
             required
+            className="input-box flex-1"
           >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
@@ -158,13 +154,15 @@ const AppointmentForm = () => {
             value={formData.appointment_date}
             onChange={handleChange}
             required
+            className="input-box flex-1"
           />
         </div>
-        <div className="">
+        <div className="flex gap-4 md:flex-row flex-col">
           <select
             value={formData.department}
             onChange={handleChange}
             name="department"
+            className="input-box flex-1"
           >
             <option value="">Select Department</option>
             {doctorDepartments.map((department, index) => {
@@ -180,6 +178,7 @@ const AppointmentForm = () => {
             value={`${formData.doctor_firstName} ${formData.doctor_lastName}`}
             onChange={handleDoctorChange}
             disabled={!formData.department}
+            className="input-box flex-1"
           >
             <option value="">Select Doctor</option>
             {doctor &&
@@ -197,17 +196,6 @@ const AppointmentForm = () => {
                 })}
           </select>
         </div>
-        <div className="">
-          <div>
-            Have you visited?
-            <input
-              type="checkbox"
-              name="hasVisited"
-              checked={formData.hasVisited}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
 
         <textarea
           name="address"
@@ -215,9 +203,12 @@ const AppointmentForm = () => {
           value={formData.address}
           onChange={handleChange}
           required
+          className="input-box"
         />
 
-        <button type="submit">Get Appointment</button>
+        <button type="submit" className="btn border">
+          Get Appointment
+        </button>
       </form>
     </div>
   );

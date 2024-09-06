@@ -36,31 +36,37 @@ const Messageform = () => {
     }
   };
   return (
-    <div className="container form-component message-form">
-      <div className="form-heading">Send us a Message</div>
-      <form onSubmit={handleMessage}>
-        <div className="">
+    <div className="flex flex-col justify-center items-center  pb-10">
+      <div className="text-center mb-10 font-bold text-[30px]">
+        Send us a Message
+      </div>
+      <form onSubmit={handleMessage} className="flex flex-col gap-8 ">
+        <div className="flex justify-between gap-4 md:flex-row flex-col ">
           <input
+            className=" input-box"
             type="text"
             placeholder="First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
           <input
+            className=" input-box"
             type="text"
             placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
-        <div className="">
+        <div className="flex justify-between gap-4 md:flex-row flex-col">
           <input
+            className=" input-box"
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
+            className=" input-box"
             type="number"
             placeholder="Phone"
             value={phone}
@@ -68,16 +74,16 @@ const Messageform = () => {
           />
         </div>
         <textarea
-          rows="7"
+          rows="3"
           placeholder="Message"
           value={message}
+          className="input-box"
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
-        <div
-          className=""
-          style={{ justifyContent: "center", alignItems: "center" }}
-        >
-          <button type="submit">Send</button>
+        <div className="btn text-center border">
+          <button type="submit" className="outline-none">
+            Send
+          </button>
         </div>
       </form>
     </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ const Register = () => {
     lastName: "",
     email: "",
     phone: "",
-    nic: "",
+
     dob: "",
     gender: "",
     password: "",
@@ -32,7 +33,7 @@ const Register = () => {
       const response = await axios.post(
         `${
           import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-        }/api/v1/user/patient/register`,
+        }/api/v1/user/register`,
         formData,
         {
           withCredentials: true,
@@ -48,7 +49,7 @@ const Register = () => {
           lastName: "",
           email: "",
           phone: "",
-          nic: "",
+
           dob: "",
           gender: "",
           password: "",
@@ -62,77 +63,92 @@ const Register = () => {
   };
 
   return (
-    <div className="container form-component login-form">
-      <div className="auth-header">Register</div>
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          name="firstName"
-          placeholder="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="lastName"
-          placeholder="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="tel"
-          name="phone"
-          placeholder="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="nic"
-          placeholder="nic"
-          value={formData.nic}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="date"
-          name="dob"
-          placeholder="dob"
-          value={formData.dob}
-          onChange={handleChange}
-          required
-        />
-        <select
-          value={formData.gender}
-          name="gender"
-          placeholder="gender"
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Register</button>
+    <div className="flex items-center justify-center flex-col gap-10 h-screen">
+      <div className="heading">Register</div>
+      <form onSubmit={handleRegister} className="flex flex-col gap-4 ">
+        <div className="flex gap-4 md:flex-row flex-col">
+          <input
+            className="input-box"
+            type="text"
+            name="firstName"
+            placeholder="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="input-box"
+            type="text"
+            name="lastName"
+            placeholder="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="flex gap-4 md:flex-row flex-col">
+          <input
+            className="input-box"
+            type="email"
+            name="email"
+            placeholder="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="input-box"
+            type="tel"
+            name="phone"
+            placeholder="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className=" flex gap-4 md:flex-row flex-col">
+          <input
+            className="input-box md:flex-1"
+            type="date"
+            name="dob"
+            placeholder="dob"
+            value={formData.dob}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className=" flex gap-4 flex-wrap">
+          <select
+            value={formData.gender}
+            name="gender"
+            placeholder="gender"
+            onChange={handleChange}
+            required
+            className="input-box flex-1"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <input
+            className="input-box flex-1"
+            type="password"
+            name="password"
+            placeholder="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button className="btn border" type="submit">
+          Register
+        </button>
+        <div className="flex justify-center items-center gap-3">
+          <div className="">Allready Registered?</div>
+          <div className="underline">
+            <Link to={"/login"}>Login Now</Link>
+          </div>
+        </div>
       </form>
     </div>
   );

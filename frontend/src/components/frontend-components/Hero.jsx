@@ -1,25 +1,36 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Hero = ({ title, subtitle, imageUrl }) => {
+const Hero = () => {
+  const navigate = useNavigate();
+
+  const title = "Online Doctor Appointment";
+  const subtitle = " an Appointment Today to Avail the Best Medical Services";
+
   return (
-    <div className="hero container">
-      <div className="banner">
-        <h1>{title}</h1>
-        <div className="subtitle">{subtitle}</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda
-          temporibus, totam explicabo recusandae fuga hic laborum odit. Eius
-          nisi maxime molestiae aliquam quos dignissimos labore, pariatur
-          expedita amet sed ea doloremque explicabo consectetur numquam cum
-          porro a temporibus, consequuntur excepturi dolores veritatis adipisci
-          error dolor omnis. Fuga numquam quam aliquid!
-        </p>
+    <div className="flex justify-between items-center md:flex-row flex-col">
+      <div className="flex-1">
+        <div className="flex flex-col gap-5">
+          <div className="lg:text-[70px] md:text-[50px] text-[40px] font-bold leading-[70px] overflow-hidden">
+            {title}
+          </div>
+          <div className="text-[20px] md:text-[25px] font-semibold">
+            <button
+              onClick={() => navigate("/appointment")}
+              className="btn border bg-white text-[#8570ed] hover:text-white hover:bg-[#8570ed]"
+            >
+              Book
+            </button>
+            {subtitle}
+          </div>
+          <p className="text-[20px] md:text-left text-justify">
+            Get benifit from outstanding healthcare community and evidence-based
+            innovation to provide high-end medical services Ranked 1 Hospital in
+            India
+          </p>
+        </div>
       </div>
-      <div className="banner">
-        <img src={imageUrl} alt="hero" className="animated-image" />
-        <span>
-          <img src="/Vector.png" alt="vector" />
-        </span>
+      <div className="flex-1 flex justify-center overflow-hidden">
+        <img src={"/hero.png"} alt="hero" className="animate-scale" />
       </div>
     </div>
   );

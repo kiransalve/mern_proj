@@ -1,75 +1,91 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { login, setAdmin } from "./store/userSlice";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+
+// Dashboard Component
+import Sidebar from "./components/dashboard/Sidebar";
+
+// Frontend Pages
 import Home from "./page/frontend/Home";
 import Appointment from "./page/frontend/Appointment";
 import Login from "./page/frontend/Login";
 import Register from "./page/frontend/Register";
-import Navbar from "./components/frontend-components/Navbar";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import About from "./page/frontend/About";
-import Footer from "./components/frontend-components/Footer";
-import Sidebar from "./components/dashboard/Sidebar";
+import Contact from "./page/frontend/Contact";
+
+// Dashboard Pages
+import AdminLogin from "./page/dashboard/AdminLogin";
 import AddNewAdmin from "./page/dashboard/AddNewAdmin";
 import AddNewDoctor from "./page/dashboard/AddNewDoctor";
 import Doctors from "./page/dashboard/Doctors";
 import Dashboard from "./page/dashboard/Dashboard";
 import Message from "./page/dashboard/Message";
-import AdminLogin from "./page/dashboard/AdminLogin";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { login, setAdmin } from "./store/userSlice";
+import Navbar from "./components/frontend-components/Navbar/Navbar";
+import Footer from "./components/frontend-components/Footer";
 
 const App = () => {
   const { isAuthenticated, isAdmin } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = JSON.parse(localStorage.getItem("user"));
     if (savedUser) {
-      const user = JSON.parse(savedUser);
-      dispatch(login(user));
-      if (user.role === "Admin") {
-        dispatch(setAdmin());
-      }
-    }
-  }, [dispatch]);
-  return (
-    <>
-      <BrowserRouter>
-        {!isAdmin && <Navbar />}
-        {isAuthenticated && isAdmin && <Sidebar />}
-        <Routes>
-          <Route element={<Home />} path="/" />
-          {isAuthenticated && (
-            <Route element={<Appointment />} path="/appointment" />
-          )}
-          <Route element={<About />} path="/about" />
-          <Route element={<Login />} path="/login" />
-          <Route element={<Register />} path="/register" />
+      dispatch(login(savedUser));
 
-          <Route element={<AdminLogin />} path="/adminlogin" />
-          {isAuthenticated && isAdmin && (
-            <Route element={<AddNewAdmin />} path="/addnewadmin" />
+      savedUser.role === "Admin" && dispatch(setAdmin());
+    }
+    setLoading(false);
+  }, [dispatch]);
+  if (loading) return <div>Loading...</div>; // Render loading while checking auth state
+
+  const authRoutes = [
+    { path: "/addnewadmin", element: <AddNewAdmin /> },
+    { path: "/addnewdoctor", element: <AddNewDoctor /> },
+    { path: "/doctors", element: <Doctors /> },
+    { path: "/dashboard", element: <Dashboard /> },
+    { path: "/message", element: <Message /> },
+  ];
+
+  const publicRoutes = [
+    { path: "/", element: <Home /> },
+    { path: "/about", element: <About /> },
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
+    { path: "/adminlogin", element: <AdminLogin /> },
+    { path: "/contact", element: <Contact /> },
+  ];
+  return (
+    <BrowserRouter>
+      <div className="mx-[40px] ">
+        {!isAdmin && <Navbar />}
+        {isAdmin && <Sidebar />}
+        <Routes>
+          {isAuthenticated && isAdmin
+            ? // Render only If user is authenticated and is admin
+              authRoutes.map(({ path, element }, index) => (
+                <Route path={path} element={element} key={index} />
+              ))
+            : // If user is not authenticated and is not admin, publically available
+              publicRoutes.map(({ path, element }, index) => (
+                <Route path={path} element={element} key={index} />
+              ))}
+          {isAuthenticated && (
+            <Route path="/appointment" element={<Appointment />} />
           )}
-          {isAuthenticated && isAdmin && (
-            <Route element={<AddNewDoctor />} path="/addnewdoctor" />
+          {/* Default redirect for unauthenticated users */}
+          {!isAuthenticated && (
+            <Route path="*" element={<Navigate to="/login" />} />
           )}
-          {isAuthenticated && isAdmin && (
-            <Route element={<Doctors />} path="/doctors" />
-          )}
-          {isAuthenticated && isAdmin && (
-            <Route element={<Dashboard />} path="/dashboard" />
-          )}
-          {isAuthenticated && isAdmin && (
-            <Route element={<Message />} path="/message" />
-          )}
-          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
-        {isAuthenticated && !isAdmin && <Footer />}
         <ToastContainer position="top-center" />
-      </BrowserRouter>
-    </>
+      </div>
+      {!isAdmin && <Footer />}
+    </BrowserRouter>
   );
 };
 

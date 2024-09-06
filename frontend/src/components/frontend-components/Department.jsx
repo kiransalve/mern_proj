@@ -1,4 +1,3 @@
-import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
@@ -10,7 +9,7 @@ const Department = () => {
     },
     {
       name: "Orthopedics",
-      imageUrl: "/departments/ortho.jpg",
+      imageUrl: "/departments/ortho.png",
     },
     {
       name: "Cardiology",
@@ -18,15 +17,7 @@ const Department = () => {
     },
     {
       name: "Neurology",
-      imageUrl: "/departments/neuro.jpg",
-    },
-    {
-      name: "Oncology",
-      imageUrl: "/departments/onco.jpg",
-    },
-    {
-      name: "Radiology",
-      imageUrl: "/departments/radio.jpg",
+      imageUrl: "/departments/neuro.avif",
     },
     {
       name: "Physical Therapy",
@@ -39,6 +30,14 @@ const Department = () => {
     {
       name: "ENT",
       imageUrl: "/departments/ent.jpg",
+    },
+    {
+      name: "General Physician",
+      imageUrl: "/departments/gen.avif",
+    },
+    {
+      name: "Gynacology",
+      imageUrl: "/departments/gyn.jpg",
     },
   ];
 
@@ -66,10 +65,8 @@ const Department = () => {
   };
 
   return (
-    <div className="container departments">
-      <h2 className="" style={{ textAlign: "center" }}>
-        Departments
-      </h2>
+    <div className="px-6 py-6">
+      <div className="text-center my-5 heading">Departments</div>
       <Carousel
         responsive={responsive}
         removeArrowOnDeviceType={["medium", "small"]}
@@ -85,9 +82,18 @@ const Department = () => {
       >
         {departmentsArray.map((depart, index) => {
           return (
-            <div className="card" key={index}>
-              <div className="depart-name">{depart.name}</div>
-              <img src={depart.imageUrl} alt={depart.name} />
+            <div
+              className="relative rounded-lg flex flex-col justify-center items-center pb-4 pl-2 pr-4 min-h-[300px] mx-2"
+              key={index}
+            >
+              <div className="bg-purple-500 bg-opacity-50  cursor-pointer w-48 text-lg uppercase flex justify-center py-2 rounded-full font-bold transition-colors duration-300">
+                {depart.name}
+              </div>
+              <img
+                src={depart.imageUrl}
+                alt={depart.name}
+                className="absolute w-full h-full object-cover rounded-lg z-[-1] "
+              />
             </div>
           );
         })}

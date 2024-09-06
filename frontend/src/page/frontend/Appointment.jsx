@@ -2,7 +2,7 @@ import AppointmentForm from "../../components/frontend-components/AppointmentFor
 
 const Appointment = () => {
   return (
-    <div>
+    <div className="h-screen">
       <AppointmentForm />
     </div>
   );

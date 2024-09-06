@@ -1,18 +1,15 @@
 import Hero from "../../components/frontend-components/Hero";
 import Department from "../../components/frontend-components/Department";
-import Biography from "../../components/frontend-components/Biography";
-import Messageform from "../../components/frontend-components/Messageform";
+import DoctorCards from "../../components/frontend-components/DoctorCards";
+import Schedule from "../../components/frontend-components/Schedule";
+
 const Home = () => {
   return (
     <div>
-      <Hero
-        title={"Welcome to Medical Institute "}
-        subtitle={"Your Trusted provider"}
-        imageUrl={"/hero.png"}
-      />
+      <Hero />
       <Department />
-      <Biography imageUrl={"/about.png"} />
-      <Messageform />
+      <DoctorCards />
+      <Schedule />
     </div>
   );
 };

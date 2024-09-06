@@ -9,7 +9,6 @@ const AddNewAdmin = () => {
     lastName: "",
     email: "",
     phone: "",
-    nic: "",
     dob: "",
     gender: "",
     password: "",
@@ -49,7 +48,7 @@ const AddNewAdmin = () => {
           lastName: "",
           email: "",
           phone: "",
-          nic: "",
+
           dob: "",
           gender: "",
           password: "",
@@ -64,78 +63,87 @@ const AddNewAdmin = () => {
   };
 
   return (
-    <section className="page">
-      <div className="container form-component login-form">
-        <div className="auth-header">Add New Admin</div>
-        <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            name="firstName"
-            placeholder="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            placeholder="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="nic"
-            placeholder="nic"
-            value={formData.nic}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="date"
-            name="dob"
-            placeholder="dob"
-            value={formData.dob}
-            onChange={handleChange}
-            required
-          />
-          <select
-            value={formData.gender}
-            name="gender"
-            placeholder="gender"
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          <input
-            type="password"
-            name="password"
-            placeholder="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">Register</button>
+    <section className="relative md:left-11 left-0 w-full mt-11 mb-52">
+      <div className="flex items-center justify-center flex-col gap-10">
+        <div className="heading">Add New Admin</div>
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
+          <div className="flex gap-4 md:flex-row flex-col">
+            <input
+              className="input-box"
+              type="text"
+              name="firstName"
+              placeholder="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
+            <input
+              className="input-box"
+              type="text"
+              name="lastName"
+              placeholder="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex gap-4 md:flex-row flex-col">
+            <input
+              className="input-box"
+              type="email"
+              name="email"
+              placeholder="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              className="input-box"
+              type="tel"
+              name="phone"
+              placeholder="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex gap-4 md:flex-row flex-col">
+            <input
+              className="input-box md:flex-1"
+              type="date"
+              name="dob"
+              placeholder="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex gap-4 flex-wrap">
+            <select
+              value={formData.gender}
+              name="gender"
+              placeholder="gender"
+              onChange={handleChange}
+              required
+              className="input-box flex-1"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <input
+              className="input-box"
+              type="password"
+              name="password"
+              placeholder="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit" className="btn border">
+            Register
+          </button>
         </form>
       </div>
     </section>

@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { FaUserCircle } from "react-icons/fa";
 
 const AddNewDoctor = () => {
   const { isAuthenticated, isAdmin } = useSelector((state) => state.user);
-  console.log(isAdmin, isAuthenticated);
+  const navigate = useNavigate();
+
   const doctorDepartments = [
     "Cardiology",
     "Dermatology",
-    "Gynacologist",
+    "Gynecology",
     "General Physician",
   ];
 
@@ -19,7 +21,6 @@ const AddNewDoctor = () => {
     lastName: "",
     email: "",
     phone: "",
-    nic: "",
     dob: "",
     gender: "",
     password: "",
@@ -29,7 +30,6 @@ const AddNewDoctor = () => {
     docAvatarPreview: "",
   });
 
-  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -51,7 +51,7 @@ const AddNewDoctor = () => {
       }));
     };
   };
-  // Handle form submission
+
   const handleRegister = async (e) => {
     e.preventDefault();
     const formdata = new FormData();
@@ -77,10 +77,13 @@ const AddNewDoctor = () => {
           lastName: "",
           email: "",
           phone: "",
-          nic: "",
+
           dob: "",
           gender: "",
           password: "",
+          doctorDepartment: "",
+          docAvatar: "",
+          docAvatarPreview: "",
         });
         toast.success(response.data.message);
         navigate("/dashboard");
@@ -91,108 +94,124 @@ const AddNewDoctor = () => {
     }
   };
 
+  // Redirect non-admin users
+  if (!isAuthenticated || !isAdmin) {
+    navigate("/login");
+  }
+
   return (
-    <section className="page">
-      <div className="container form-component add-doctor-form">
-        <div className="auth-header">Add New Doctor</div>
-        <form onSubmit={handleRegister}>
-          <div className="first-wrapper">
-            <div className="">
+    <section className="relative md:left-11 left-0 w-full mt-11 mb-52">
+      <div className="flex items-center justify-center flex-col gap-10">
+        <div className="heading">Add New Doctor</div>
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
+          <div className="flex gap-4 md:flex-row flex-col md:items-center items-start">
+            {formData.docAvatarPreview ? (
               <img
-                src={
-                  formData.docAvatarPreview
-                    ? `${formData.docAvatarPreview}`
-                    : "/docHolder.jpg"
-                }
-                alt=""
+                className="w-32 h-32 rounded-lg mb-4"
+                src={formData.docAvatarPreview}
+                alt={`${formData.firstName} ${formData.lastName}`}
               />
+            ) : (
+              <FaUserCircle className="w-32 h-32" />
+            )}
+            <div className="">
               <input type="file" accept="image/*" onChange={handledocAvatar} />
             </div>
           </div>
 
-          <input
-            type="text"
-            name="firstName"
-            placeholder="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            placeholder="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="nic"
-            placeholder="nic"
-            value={formData.nic}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="date"
-            name="dob"
-            placeholder="dob"
-            value={formData.dob}
-            onChange={handleChange}
-            required
-          />
-          <select
-            value={formData.gender}
-            name="gender"
-            placeholder="gender"
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          <input
-            type="password"
-            name="password"
-            placeholder="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="doctorDepartment"
-            value={formData.doctorDepartment}
-            onChange={handleChange}
-          >
-            <option value="">Select</option>
-
-            {doctorDepartments.map((department, index) => {
-              return (
+          <div className="flex gap-4 md:flex-row flex-col">
+            <input
+              className="input-box"
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
+            <input
+              className="input-box"
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex gap-4 md:flex-row flex-col">
+            <input
+              className="input-box"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              className="input-box"
+              type="tel"
+              name="phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex gap-4 md:flex-row flex-col">
+            <input
+              className="input-box md:flex-1"
+              type="date"
+              name="dob"
+              placeholder="Date of Birth"
+              value={formData.dob}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex gap-4 flex-wrap">
+            <select
+              value={formData.gender}
+              name="gender"
+              placeholder="Gender"
+              onChange={handleChange}
+              required
+              className="input-box flex-1"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <select
+              name="doctorDepartment"
+              value={formData.doctorDepartment}
+              onChange={handleChange}
+              className="input-box flex-1"
+            >
+              <option value="">Select Department</option>
+              {doctorDepartments.map((department, index) => (
                 <option value={department} key={index}>
                   {department}
                 </option>
-              );
-            })}
-          </select>
-          <button type="submit">Add</button>
+              ))}
+            </select>
+          </div>
+          <div className="">
+            <input
+              className="input-box w-full"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button className="btn border" type="submit">
+            Add Doctor
+          </button>
         </form>
       </div>
     </section>
