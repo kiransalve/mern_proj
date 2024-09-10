@@ -53,9 +53,6 @@ const App = () => {
     );
   }
 
-  if (isAdmin) {
-    <Navigate to="/dashboard" />;
-  }
   return (
     <BrowserRouter>
       <div className="mx-[40px]">
@@ -63,32 +60,34 @@ const App = () => {
         {isAuthenticated && isAdmin && <Sidebar />}
         <Routes>
           {/* Admin Routes */}
-          {isAdmin && (
+          {isAdmin ? (
             <>
               <Route path="/addnewadmin" element={<AddNewAdmin />} />
               <Route path="/addnewdoctor" element={<AddNewDoctor />} />
               <Route path="/doctors" element={<Doctors />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/message" element={<Message />} />
+              <Route path="*" element={<Navigate to="/dashboard" />} />
             </>
-          )}
+          ) : null}
 
           {/* Authenticated User Routes */}
-          {isAuthenticated && (
+          {isAuthenticated ? (
             <>
               <Route path="/appointment" element={<Appointment />} />
               <Route path="/me" element={<UserProfile />} />
             </>
-          )}
+          ) : null}
 
           {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          {!isAdmin && <Route path="/" element={<Home />} />}
+          {!isAdmin && <Route path="/about" element={<About />} />}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/doctorlogin" element={<DoctorLogin />} />
-          <Route path="/contact" element={<Contact />} />
+          {!isAdmin && <Route path="/contact" element={<Contact />} />}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
 
         <ToastContainer position="top-center" />

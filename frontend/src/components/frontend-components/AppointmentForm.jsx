@@ -124,39 +124,39 @@ const AppointmentForm = () => {
           />
         </div>
         <div className="flex gap-4 md:flex-row flex-col">
-          <input
-            placeholder="DOB"
-            type="date"
-            name="dob"
-            value={formData.dob}
-            onChange={handleChange}
-            required
-            className="input-box flex-1"
-          />
-        </div>
-        <div className="flex gap-4 md:flex-row flex-col">
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-            className="input-box flex-1"
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
+          <div className="flex flex-col flex-1">
+            <label htmlFor="dob" className="mb-1">
+              Birth Date
+            </label>
+            <input
+              id="dob"
+              placeholder="DOB"
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              required
+              className="input-box"
+            />
+          </div>
 
-          <input
-            placeholder="Appointment Date"
-            type="date"
-            name="appointment_date"
-            value={formData.appointment_date}
-            onChange={handleChange}
-            required
-            className="input-box flex-1"
-          />
+          <div className="flex flex-col flex-1">
+            <label htmlFor="appointment_date" className="mb-1">
+              Appointment Date
+            </label>
+            <input
+              id="appointment_date"
+              placeholder="Appointment Date"
+              type="date"
+              name="appointment_date"
+              value={formData.appointment_date}
+              onChange={handleChange}
+              required
+              className="input-box"
+            />
+          </div>
         </div>
+
         <div className="flex gap-4 md:flex-row flex-col">
           <select
             value={formData.department}
@@ -194,6 +194,19 @@ const AppointmentForm = () => {
                     </option>
                   );
                 })}
+          </select>
+        </div>
+        <div className="flex gap-4 md:flex-row flex-col">
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+            className="input-box flex-1"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
           </select>
         </div>
 
