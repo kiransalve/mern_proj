@@ -8,6 +8,7 @@ import {
   logoutUser,
   addNewDoctor,
   getAllPatient,
+  updateUserInfo,
 } from "../controller/userController.js";
 import { isAuthenticated, isAdmin } from "../middleware/auth.js";
 
@@ -20,6 +21,7 @@ router.get("/me", isAuthenticated, getUserDetails);
 router.get("/logout", isAuthenticated, logoutUser);
 router.get("/doctors", isAuthenticated, getAllDoctors);
 router.get("/patient", isAuthenticated, getAllPatient);
+router.put("/update/:id", isAuthenticated, updateUserInfo);
 
 // Admin-specific routes
 router.post("/admin/addnew", isAuthenticated, isAdmin, addNewAdmin);

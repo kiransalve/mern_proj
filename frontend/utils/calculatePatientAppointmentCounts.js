@@ -14,12 +14,13 @@ const calculatePatientAppointmentCounts = (id, appointments) => {
   const pendingCount = appointment.filter(
     (appointment) => appointment.status === "Pending"
   ).length;
-
+  const status = appointment.map((appointment) => appointment.status);
   return {
     count: appointment.length,
     acceptedCount,
     pendingCount,
     rejectedCount,
+    status,
   };
 };
 

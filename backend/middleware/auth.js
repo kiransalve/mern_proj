@@ -3,9 +3,12 @@ import { catchAsyncError } from "./catchAsyncError.js";
 import ErrorHandlar from "./errorMiddleware.js";
 import jwt from "jsonwebtoken";
 
-// Common middleware to authenticate users (both admin and patient)
+// Common middleware to authenticate users
 export const isAuthenticated = catchAsyncError(async function (req, res, next) {
-  const token = req.cookies.adminToken || req.cookies.patientToken;
+  const token =
+    req.cookies.adminToken ||
+    req.cookies.patientToken ||
+    req.cookies.doctorToken;
 
   if (!token) {
     return next(new ErrorHandlar("Not authenticated!", 400));
@@ -14,7 +17,7 @@ export const isAuthenticated = catchAsyncError(async function (req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = await User.findById(decoded.id);
-
+    console.log(req.user);
     if (!req.user) {
       return next(new ErrorHandlar("User not found!", 404));
     }

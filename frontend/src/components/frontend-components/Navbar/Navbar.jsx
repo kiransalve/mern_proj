@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../store/userSlice";
 import MobileNav from "./MobileNav";
 import Links from "./Links";
+
 const logo = "MediBooker";
+
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -15,35 +15,25 @@ const Navbar = () => {
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const name = user?.firstName;
-
-  const handleLogout = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/v1/user/logout`,
-        { withCredentials: true }
-      );
-      toast.success(response.data.message);
-      localStorage.removeItem("user");
-      dispatch(logout());
-      navigate("/login");
-    } catch (error) {
-      console.error(error);
-    }
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
   };
-  console.log(show);
   return (
     <nav className="md:px-[100px] px-[40px]">
       {/* Mobile Navlinks */}
-      {show && (
-        <MobileNav
-          show={show}
-          setShow={setShow}
-          isAuthenticated={isAuthenticated}
-          handleLogout={handleLogout}
-          navigate={navigate}
-          name={name}
-        />
-      )}
+      <div className="lg:hidden block">
+        {show && (
+          <MobileNav
+            show={show}
+            setShow={setShow}
+            isAuthenticated={isAuthenticated}
+            handleLogout={handleLogout}
+            navigate={navigate}
+            name={name}
+          />
+        )}
+      </div>
       <div className="py-5 w-full flex items-center justify-between">
         <div
           className="text-[30px] font-bold cursor-pointer"
@@ -60,7 +50,10 @@ const Navbar = () => {
         <div className="lg:flex gap-7 hidden items-center">
           <Links setShow={setShow} />
           {isAuthenticated && (
-            <div className="font-bold text-violet-500 bg-white rounded-lg px-2 py-1">
+            <div
+              className="font-bold text-violet-500 bg-white rounded-lg px-2 py-1 cursor-pointer hover:bg-[#8570ed] hover:text-white border"
+              onClick={() => navigate("/me")}
+            >
               Hi {name}
             </div>
           )}

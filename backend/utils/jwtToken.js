@@ -13,7 +13,12 @@ export const generateToken = (user, message, statusCode, res) => {
     Date.now() + cookieExpire * 24 * 60 * 60 * 1000
   );
 
-  const cookieName = user.role === "Admin" ? "adminToken" : "patientToken";
+  const cookieName =
+    user.role === "Admin"
+      ? "adminToken"
+      : user.role === "Patient"
+      ? "patientToken"
+      : "doctorToken";
 
   res
     .status(statusCode)

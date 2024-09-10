@@ -30,20 +30,37 @@ const UserTable = () => {
               <th className="py-3 px-10 font-bold text-[17px] text-center">
                 Appointments
               </th>
-              <th className="py-3 px-10 font-bold text-[17px] text-center">
-                Accepted Appointments
-              </th>
-              <th className="py-3 pr-10 font-bold text-[17px] text-center">
-                Pending Appointments
-              </th>
-              <th className="py-3 px-3 font-bold text-[17px] text-center">
-                Rejected Appointments
-              </th>
             </tr>
           </thead>
           <tbody>
             {patients && patients.length > 0 ? (
               patients.map((element, index) => {
+                const {
+                  acceptedCount,
+                  pendingCount,
+                  rejectedCount,
+                } = calculatePatientAppointmentCounts(
+                  element._id,
+                  appointments
+                );
+                // Construct the status text by including only counts greater than 0
+                const statusText = [
+                  acceptedCount > 0 ? (
+                    <span className="bg-green-500 p-1 rounded-md mx-1">
+                      A-{acceptedCount}
+                    </span>
+                  ) : null,
+                  pendingCount > 0 ? (
+                    <span className="bg-yellow-400 px-2 py-1 rounded-md mx-1">
+                      P-{pendingCount}
+                    </span>
+                  ) : null,
+                  rejectedCount > 0 ? (
+                    <span className="bg-red-400 px-2 py-1 rounded-md mx-1">
+                      R-{rejectedCount}
+                    </span>
+                  ) : null,
+                ];
                 return (
                   <tr
                     className="border-b border-gray-200 font-bold cursor-pointer"
@@ -58,38 +75,7 @@ const UserTable = () => {
                     </td>
                     <td className="py-3 px-10 text-center">{element.phone}</td>
                     <td className="py-3 px-10 text-center">{element.gender}</td>
-                    <td className="py-3 px-10 text-center">
-                      {
-                        calculatePatientAppointmentCounts(
-                          element._id,
-                          appointments
-                        ).count
-                      }
-                    </td>
-                    <td className="py-3 px-10 text-center">
-                      {
-                        calculatePatientAppointmentCounts(
-                          element._id,
-                          appointments
-                        ).acceptedCount
-                      }
-                    </td>
-                    <td className="py-3 px-10 text-center">
-                      {
-                        calculatePatientAppointmentCounts(
-                          element._id,
-                          appointments
-                        ).pendingCount
-                      }
-                    </td>
-                    <td className="py-3 px-6 text-center">
-                      {
-                        calculatePatientAppointmentCounts(
-                          element._id,
-                          appointments
-                        ).rejectedCount
-                      }
-                    </td>
+                    <td className="py-3 px-10 text-center">{statusText}</td>
                   </tr>
                 );
               })

@@ -59,16 +59,10 @@ export const patientRegister = catchAsyncError(async (req, res, next) => {
 });
 
 export const login = catchAsyncError(async (req, res, next) => {
-  const { email, password, confirmPassword, role } = req.body;
+  const { email, password, role } = req.body;
 
-  if (!email || !password || !confirmPassword || !role) {
+  if (!email || !password || !role) {
     return next(new ErrorHandlar("Please provide all details", 400));
-  }
-
-  if (password !== confirmPassword) {
-    return next(
-      new ErrorHandlar("Password and Confirm password Do not match!", 400)
-    );
   }
 
   const user = await User.findOne({ email }).select("+password");
@@ -155,7 +149,14 @@ export const getUserDetails = catchAsyncError(async (req, res, next) => {
 
 export const logoutUser = (req, res, next) => {
   // Clear the appropriate token based on user role
-  const tokenKey = req.user.role === "Admin" ? "adminToken" : "patientToken";
+  const role = req.user.role;
+  const tokenKey =
+    role === "Admin"
+      ? "adminToken"
+      : role === "Patient"
+      ? "patientToken"
+      : "doctorToken";
+
   res.clearCookie(tokenKey);
   res.status(200).json({
     success: true,
@@ -240,5 +241,24 @@ export const getAllMessages = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message,
+  });
+});
+
+//Backend logic
+export const updateUserInfo = catchAsyncError(async (req, res, next) => {
+  const id = req.user._id;
+  let user = await User.findById(id);
+  if (!user) {
+    return next(new ErrorHandlar("User not found!", 404));
+  }
+
+  user = await User.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  res.status(200).json({
+    success: true,
+    user,
   });
 });

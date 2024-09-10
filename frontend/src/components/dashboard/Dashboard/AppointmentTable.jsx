@@ -1,12 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
-import { updateAppointmentStatus } from "../../../store/appointmentSlice";
+import { useSelector } from "react-redux";
 
 const AppointmentTable = () => {
   const { appointments } = useSelector((state) => state.appointments);
-  const dispatch = useDispatch();
-  const handleUpdateStatus = (id, newStatus) => {
-    dispatch(updateAppointmentStatus({ id, status: newStatus }));
-  };
   return (
     <div>
       <div className="flex flex-col md:mx-11">
@@ -52,17 +47,21 @@ const AppointmentTable = () => {
                       {element.department}
                     </td>
                     <td className="py-3 px-6 text-center">
-                      <select
-                        className="input-box py-1 px-2 rounded border border-gray-300"
-                        value={element.status}
-                        onChange={(e) =>
-                          handleUpdateStatus(element._id, e.target.value)
-                        }
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Accepted">Accepted</option>
-                        <option value="Rejected">Rejected</option>
-                      </select>
+                      {element.status === "Accepted" && (
+                        <span className="bg-green-400 text-white p-1 rounded-md">
+                          {element.status}
+                        </span>
+                      )}
+                      {element.status === "Pending" && (
+                        <span className="bg-yellow-400 text-white p-1 rounded-md">
+                          {element.status}
+                        </span>
+                      )}
+                      {element.status === "Rejected" && (
+                        <span className="bg-red-400 text-white p-1 rounded-md">
+                          {element.status}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))

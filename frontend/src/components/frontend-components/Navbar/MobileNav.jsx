@@ -19,7 +19,13 @@ const MobileNav = ({
       </div>
       <div className="flex flex-col items-center justify-center gap-10 h-full ">
         {isAuthenticated && (
-          <div className="font-bold text-violet-500 bg-white rounded-lg px-2 py-1">
+          <div
+            className="font-bold text-violet-500 bg-white rounded-lg px-2 py-1 cursor-pointer"
+            onClick={() => {
+              navigate("/me");
+              setShow(!show);
+            }}
+          >
             Hi {name}
           </div>
         )}

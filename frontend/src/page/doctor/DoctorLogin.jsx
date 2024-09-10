@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "../../store/userSlice";
 
-const Login = () => {
+const DoctorLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,16 +24,17 @@ const Login = () => {
             `${
               import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
             }/api/v1/user/login`,
-            { email, password, role: "Patient" },
+            { email, password, role: "Doctor" },
             {
               withCredentials: true,
               headers: { "Content-Type": "application/json" },
             }
           );
+
           if (response.data.success) {
             toast.success(response.data.message);
             dispatch(fetchCurrentUser());
-            navigate("/");
+            navigate("/me");
           }
         } catch (error) {
           console.error(error);
@@ -49,7 +50,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-start flex-col gap-10 h-screen">
-      <div className="heading">Sign In</div>
+      <div className="heading">Doctor Sign In</div>
       <form onSubmit={handleLogin} className="flex flex-col gap-10">
         <input
           type="email"
@@ -67,24 +68,17 @@ const Login = () => {
           required
           className="input-box"
         />
+
         <div className="btn border text-center flex items-center justify-center overflow-hidden">
           {loading ? (
-            <div className="spinner"></div> // Show spinner when loading
+            <div className="spinner"></div>
           ) : (
             <button type="submit">Login</button>
           )}
-        </div>
-        <div className="flex justify-between items-center gap-3">
-          <div className="">Not Registered?</div>
-          <div className="underline">
-            <Link to={"/register"} className="registerLink">
-              Register Now
-            </Link>
-          </div>
         </div>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default DoctorLogin;
